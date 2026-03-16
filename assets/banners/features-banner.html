@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 860px;
+    background: #0a0a0f;
+    font-family: 'VT323', monospace;
+    padding: 20px;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 42px;
+    color: #88ddff;
+    letter-spacing: 4px;
+    text-shadow: 3px 3px 0 #000, 0 0 20px rgba(100,200,255,0.5);
+    margin-bottom: 20px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .card {
+    background: linear-gradient(160deg, #111827 0%, #0d1117 100%);
+    border: 2px solid #1e3a5f;
+    border-radius: 6px;
+    padding: 16px 14px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .card-ice::before    { background: linear-gradient(90deg, #55aaff, #aaddff); }
+  .card-red::before    { background: linear-gradient(90deg, #ff3333, #ff8844); }
+  .card-green::before  { background: linear-gradient(90deg, #22aa44, #55ff88); }
+  .card-gold::before   { background: linear-gradient(90deg, #cc8800, #ffcc44); }
+  .card-purple::before { background: linear-gradient(90deg, #8833cc, #cc66ff); }
+  .card-teal::before   { background: linear-gradient(90deg, #008888, #44dddd); }
+
+  .card-icon {
+    font-size: 36px;
+    display: block;
+    margin-bottom: 6px;
+    filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.8));
+  }
+
+  .card-title {
+    font-size: 26px;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+    text-shadow: 2px 2px 0 #000;
+  }
+
+  .title-ice    { color: #88ddff; }
+  .title-red    { color: #ff6644; }
+  .title-green  { color: #44ff88; }
+  .title-gold   { color: #ffcc44; }
+  .title-purple { color: #cc88ff; }
+  .title-teal   { color: #44dddd; }
+
+  .card-desc {
+    font-size: 17px;
+    color: #8899aa;
+    line-height: 1.4;
+    letter-spacing: 0.5px;
+  }
+
+  .card-desc b {
+    color: #cce0ff;
+  }
+
+  /* Pixel item decorations */
+  .pixel-item {
+    position: absolute;
+    bottom: 8px; right: 10px;
+    font-size: 28px;
+    opacity: 0.18;
+  }
+</style>
+</head>
+<body>
+
+<h1>✦ FEATURES ✦</h1>
+
+<div class="grid">
+
+  <div class="card card-ice">
+    <span class="card-icon">❄️</span>
+    <div class="card-title title-ice">FREEZE MECHANIC</div>
+    <div class="card-desc">
+      <b>Taggers</b> left-click runners to freeze them in place.
+      Frozen players <b>cannot move or jump</b> until unfrozen
+      by a teammate.
+    </div>
+    <div class="pixel-item">🧊</div>
+  </div>
+
+  <div class="card card-red">
+    <span class="card-icon">⚔️</span>
+    <div class="card-title title-red">ROLES & CLASSES</div>
+    <div class="card-desc">
+      Choose <b>Tagger</b> or <b>Runner</b> preference.
+      Select a <b>class</b> with unique abilities from the
+      hotbar class menu.
+    </div>
+    <div class="pixel-item">🛡️</div>
+  </div>
+
+  <div class="card card-green">
+    <span class="card-icon">🗳️</span>
+    <div class="card-title title-green">MAP VOTING</div>
+    <div class="card-desc">
+      Join the <b>Vote Lobby</b> and vote for your favourite
+      map. The map with the most votes <b>wins</b> when
+      the countdown ends.
+    </div>
+    <div class="pixel-item">🗺️</div>
+  </div>
+
+  <div class="card card-gold">
+    <span class="card-icon">🏆</span>
+    <div class="card-title title-gold">MULTI-ARENA</div>
+    <div class="card-desc">
+      Run <b>multiple arenas</b> simultaneously. Set arenas
+      as <b>vote-only</b> so they only appear in the vote lobby.
+    </div>
+    <div class="pixel-item">🏛️</div>
+  </div>
+
+  <div class="card card-purple">
+    <span class="card-icon">📊</span>
+    <div class="card-title title-purple">LIVE SCOREBOARD</div>
+    <div class="card-desc">
+      Dynamic sidebar scoreboard shows <b>timer, frozen count,
+      role, class</b>, and live vote standings in the lobby.
+    </div>
+    <div class="pixel-item">📋</div>
+  </div>
+
+  <div class="card card-teal">
+    <span class="card-icon">🌐</span>
+    <div class="card-title title-teal">VOTE LOBBY</div>
+    <div class="card-desc">
+      A <b>universal pre-game lobby</b> with rainbow map voting
+      item, role selection, and automatic game launch on
+      countdown end.
+    </div>
+    <div class="pixel-item">🎮</div>
+  </div>
+
+</div>
+
+</body>
+</html>

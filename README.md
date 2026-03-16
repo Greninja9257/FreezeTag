@@ -1,5 +1,3 @@
-# FreezeTag
-
 ![Logo](assets/logo.png)
 
 ![FreezeTag Banner](assets/banners/main%20banner.png)

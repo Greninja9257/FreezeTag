@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 860px;
+    height: 300px;
+    background: #000;
+    font-family: 'VT323', monospace;
+    overflow: hidden;
+  }
+
+  .bg {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    position: relative;
+  }
+
+  /* Left half — Tagger (red) */
+  .half-tagger {
+    flex: 1;
+    background: linear-gradient(135deg, #1a0000 0%, #2a0808 50%, #1a0000 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Right half — Runner (blue) */
+  .half-runner {
+    flex: 1;
+    background: linear-gradient(135deg, #00081a 0%, #081828 50%, #00081a 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Diagonal divider */
+  .divider {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, transparent, #ffffff44, #ffffff88, #ffffff44, transparent);
+    z-index: 20;
+    transform: translateX(-50%);
+  }
+
+  /* VS badge */
+  .vs {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: #111;
+    border: 3px solid #444;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    color: #fff;
+    text-shadow: 2px 2px 0 #000;
+    z-index: 30;
+    box-shadow: 0 0 20px rgba(255,255,255,0.1);
+    letter-spacing: 0;
+  }
+
+  /* Glow lines in background */
+  .half-tagger::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(255,40,40,0.12) 0%, transparent 65%);
+  }
+  .half-runner::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 70% 50%, rgba(40,80,255,0.12) 0%, transparent 65%);
+  }
+
+  /* === Minecraft pixel character === */
+  .mc-char-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    position: relative;
+    z-index: 5;
+  }
+
+  .head {
+    width: 56px; height: 56px;
+    border-radius: 4px;
+    background: #c68642;
+    border: 3px solid #000;
+    position: relative;
+  }
+  /* eyes */
+  .head::before {
+    content: '';
+    position: absolute;
+    top: 18px; left: 7px;
+    width: 12px; height: 12px;
+    background: #fff;
+    box-shadow: 22px 0 0 #fff;
+  }
+  .head::after {
+    content: '';
+    position: absolute;
+    top: 20px; left: 10px;
+    width: 6px; height: 7px;
+    background: #1a0800;
+    box-shadow: 22px 0 0 #1a0800;
+  }
+
+  /* helmets */
+  .helmet {
+    position: absolute;
+    top: -5px; left: -4px;
+    width: 64px; height: 32px;
+    border-radius: 5px 5px 0 0;
+    z-index: 2;
+    border: 3px solid rgba(0,0,0,0.6);
+  }
+  .helmet-t { background: linear-gradient(180deg, #cc2222 0%, #991111 100%); }
+  .helmet-r { background: linear-gradient(180deg, #2255cc 0%, #113399 100%); }
+  .helmet::after {
+    content: '';
+    position: absolute;
+    bottom: -5px; left: 0;
+    width: 100%; height: 6px;
+    border-top: 2px solid rgba(255,255,255,0.3);
+  }
+  .helmet-t::after { background: #bb1111; }
+  .helmet-r::after { background: #1144bb; }
+
+  .chest {
+    width: 56px; height: 42px;
+    border-radius: 3px;
+    border: 3px solid rgba(0,0,0,0.5);
+    position: relative;
+    margin-top: -3px;
+  }
+  .chest-t { background: linear-gradient(180deg, #dd2222 0%, #aa1111 100%); }
+  .chest-r { background: linear-gradient(180deg, #2266dd 0%, #1144aa 100%); }
+  .chest::before {
+    content: '';
+    position: absolute;
+    top: 4px; left: 6px;
+    width: 16px; height: 24px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 2px;
+  }
+
+  .legs-wrap { display: flex; gap: 5px; margin-top: -3px; }
+  .leg {
+    width: 24px; height: 36px;
+    border-radius: 2px;
+    border: 2px solid rgba(0,0,0,0.5);
+  }
+  .leg-t { background: linear-gradient(180deg, #991111 0%, #770000 100%); }
+  .leg-r  { background: linear-gradient(180deg, #224499 0%, #112266 100%); }
+
+  .boots-wrap { display: flex; gap: 5px; margin-top: -2px; }
+  .boot {
+    width: 26px; height: 16px;
+    border-radius: 0 0 4px 4px;
+    border: 2px solid rgba(0,0,0,0.5);
+  }
+  .boot-t { background: #cc2222; }
+  .boot-r  { background: #2255cc; }
+
+  /* Role label */
+  .role-label {
+    font-size: 36px;
+    letter-spacing: 3px;
+    margin-top: 10px;
+    text-shadow: 3px 3px 0 #000;
+  }
+  .role-label-t { color: #ff5555; }
+  .role-label-r { color: #5588ff; }
+
+  /* Bullet list */
+  .role-perks {
+    margin-top: 6px;
+    font-size: 18px;
+    color: #aab8cc;
+    text-align: center;
+    letter-spacing: 1px;
+    line-height: 1.5;
+    text-shadow: 1px 1px 0 #000;
+    z-index: 5;
+    position: relative;
+  }
+  .perk-t { color: #ff8888; }
+  .perk-r { color: #88aaff; }
+
+  /* Corner grid texture */
+  .half-tagger::after, .half-runner::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 16px 16px;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<div class="bg">
+
+  <!-- TAGGER side -->
+  <div class="half-tagger">
+    <div class="mc-char-wrap">
+      <div class="head" style="position:relative">
+        <div class="helmet helmet-t"></div>
+      </div>
+      <div class="chest chest-t"></div>
+      <div class="legs-wrap">
+        <div class="leg leg-t"></div>
+        <div class="leg leg-t"></div>
+      </div>
+      <div class="boots-wrap">
+        <div class="boot boot-t"></div>
+        <div class="boot boot-t"></div>
+      </div>
+    </div>
+    <div class="role-label role-label-t">⚔ TAGGER</div>
+    <div class="role-perks">
+      <span class="perk-t">▶</span> Left-click to freeze runners<br>
+      <span class="perk-t">▶</span> Stronger in numbers<br>
+      <span class="perk-t">▶</span> Win by freezing all runners
+    </div>
+  </div>
+
+  <!-- Divider + VS -->
+  <div class="divider"></div>
+  <div class="vs">VS</div>
+
+  <!-- RUNNER side -->
+  <div class="half-runner">
+    <div class="mc-char-wrap">
+      <div class="head" style="position:relative">
+        <div class="helmet helmet-r"></div>
+      </div>
+      <div class="chest chest-r"></div>
+      <div class="legs-wrap">
+        <div class="leg leg-r"></div>
+        <div class="leg leg-r"></div>
+      </div>
+      <div class="boots-wrap">
+        <div class="boot boot-r"></div>
+        <div class="boot boot-r"></div>
+      </div>
+    </div>
+    <div class="role-label role-label-r">🏃 RUNNER</div>
+    <div class="role-perks">
+      <span class="perk-r">▶</span> Evade taggers<br>
+      <span class="perk-r">▶</span> Unfreeze frozen teammates<br>
+      <span class="perk-r">▶</span> Win by surviving the timer
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

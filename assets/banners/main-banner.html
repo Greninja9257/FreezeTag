@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    width: 860px;
+    height: 240px;
+    background: #000;
+    overflow: hidden;
+    font-family: 'VT323', monospace;
+  }
+
+  .bg {
+    width: 100%;
+    height: 100%;
+    background:
+      linear-gradient(180deg, #0a0a1a 0%, #0d1a2e 40%, #1a0a0a 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Snow/particle effect dots */
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    animation: fall linear infinite;
+    opacity: 0.6;
+  }
+  @keyframes fall {
+    from { transform: translateY(-10px); }
+    to   { transform: translateY(260px); }
+  }
+
+  /* Grid overlay (stone-like) */
+  .bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
+
+  /* Ice crack overlay */
+  .bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 20% 50%, rgba(100,180,255,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 50%, rgba(255,80,80,0.08) 0%, transparent 60%);
+  }
+
+  /* Left side: Tagger character (red armor) */
+  .char-left {
+    position: absolute;
+    left: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  /* Minecraft-style pixel character */
+  .mc-char {
+    image-rendering: pixelated;
+    display: grid;
+  }
+
+  /* HEAD */
+  .head {
+    width: 48px; height: 48px;
+    border-radius: 4px;
+    position: relative;
+    border: 3px solid rgba(0,0,0,0.5);
+  }
+  .head-tagger { background: #c68642; }
+  .head-runner { background: #c68642; }
+
+  /* Eyes */
+  .head::before {
+    content: '';
+    position: absolute;
+    top: 16px; left: 6px;
+    width: 10px; height: 10px;
+    background: #fff;
+    box-shadow: 20px 0 0 #fff;
+  }
+  .head::after {
+    content: '';
+    position: absolute;
+    top: 18px; left: 9px;
+    width: 5px; height: 6px;
+    background: #3a1a00;
+    box-shadow: 20px 0 0 #3a1a00;
+  }
+
+  /* Helmet (for tagger — red) */
+  .helmet {
+    position: absolute;
+    top: -4px; left: -3px;
+    width: 54px; height: 28px;
+    background: #aa2222;
+    border-radius: 4px 4px 0 0;
+    border: 2px solid #881111;
+    z-index: 2;
+  }
+  .helmet::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0;
+    width: 100%; height: 6px;
+    background: #cc3333;
+    border-top: 2px solid #ff5555;
+  }
+
+  /* Green helmet for runner */
+  .helmet-runner {
+    background: #228822 !important;
+    border-color: #116611 !important;
+  }
+  .helmet-runner::after {
+    background: #33aa33 !important;
+    border-top-color: #55ff55 !important;
+  }
+
+  .body-armor {
+    width: 48px; height: 36px;
+    border-radius: 3px;
+    border: 3px solid rgba(0,0,0,0.4);
+    position: relative;
+    margin-top: -2px;
+  }
+  .armor-tagger {
+    background: linear-gradient(180deg, #cc2222 0%, #991111 100%);
+  }
+  .armor-runner {
+    background: linear-gradient(180deg, #2266cc 0%, #114499 100%);
+  }
+
+  /* Chestplate shine */
+  .body-armor::before {
+    content: '';
+    position: absolute;
+    top: 3px; left: 5px;
+    width: 14px; height: 20px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 2px;
+  }
+
+  .legs {
+    display: flex;
+    gap: 4px;
+    margin-top: -2px;
+  }
+  .leg {
+    width: 20px; height: 30px;
+    border-radius: 2px;
+    border: 2px solid rgba(0,0,0,0.4);
+  }
+  .leg-tagger { background: linear-gradient(180deg, #881111 0%, #660000 100%); }
+  .leg-runner  { background: linear-gradient(180deg, #224488 0%, #112244 100%); }
+
+  .boots {
+    display: flex;
+    gap: 4px;
+    margin-top: -2px;
+  }
+  .boot {
+    width: 22px; height: 14px;
+    border-radius: 0 0 3px 3px;
+    border: 2px solid rgba(0,0,0,0.4);
+  }
+  .boot-tagger { background: #cc2222; }
+  .boot-runner  { background: #2255aa; }
+
+  /* Character label */
+  .char-label {
+    margin-top: 6px;
+    font-size: 18px;
+    letter-spacing: 1px;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.8);
+  }
+  .label-tagger { color: #ff5555; }
+  .label-runner  { color: #5599ff; }
+
+  /* ===== FROZEN EFFECT character (center-left) ===== */
+  .char-frozen {
+    position: absolute;
+    left: 170px;
+    top: 50%;
+    transform: translateY(-55%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0.85;
+  }
+
+  .ice-overlay {
+    position: absolute;
+    inset: -4px;
+    background: rgba(100, 200, 255, 0.25);
+    border: 2px solid rgba(150, 220, 255, 0.6);
+    border-radius: 4px;
+    z-index: 3;
+    pointer-events: none;
+    box-shadow: 0 0 12px rgba(100,200,255,0.5), inset 0 0 8px rgba(100,200,255,0.3);
+  }
+
+  /* ===== CENTER TITLE ===== */
+  .center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 10;
+  }
+
+  .plugin-title {
+    font-family: 'VT323', monospace;
+    font-size: 88px;
+    line-height: 1;
+    letter-spacing: 4px;
+    color: #fff;
+    text-shadow:
+      4px 4px 0 #000,
+      -2px -2px 0 #000,
+      0 0 30px rgba(100,200,255,0.8),
+      0 0 60px rgba(100,200,255,0.4);
+  }
+
+  .title-freeze { color: #88ddff; }
+  .title-tag    { color: #ff5555; }
+
+  .subtitle {
+    font-family: 'VT323', monospace;
+    font-size: 26px;
+    color: #aaaaaa;
+    letter-spacing: 3px;
+    margin-top: -8px;
+    text-shadow: 2px 2px 0 #000;
+  }
+
+  .version-badge {
+    display: inline-block;
+    background: #ffaa00;
+    color: #000;
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    padding: 1px 10px;
+    border-radius: 3px;
+    margin-top: 6px;
+    letter-spacing: 2px;
+    border: 2px solid #cc8800;
+    text-shadow: none;
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+  }
+
+  /* ===== SNOWFLAKE decorations ===== */
+  .snowflake {
+    position: absolute;
+    color: rgba(150, 210, 255, 0.5);
+    font-size: 24px;
+    font-family: serif;
+    animation: spin 8s linear infinite;
+    user-select: none;
+  }
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+  /* ===== Bottom bar ===== */
+  .bottom-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 36px;
+    background: rgba(0,0,0,0.6);
+    border-top: 2px solid rgba(100,200,255,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    z-index: 10;
+  }
+
+  .badge {
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    letter-spacing: 1px;
+    padding: 0 8px;
+    text-shadow: 1px 1px 0 #000;
+  }
+  .badge-ice   { color: #88ddff; }
+  .badge-fire  { color: #ff8844; }
+  .badge-green { color: #55ff55; }
+  .badge-gold  { color: #ffaa00; }
+  .badge-sep   { color: #333; font-size: 28px; }
+</style>
+</head>
+<body>
+<div class="bg">
+
+  <!-- Snowflakes -->
+  <div class="snowflake" style="top:10px;left:140px;font-size:16px;animation-duration:6s">❄</div>
+  <div class="snowflake" style="top:30px;left:600px;font-size:12px;animation-duration:10s;animation-direction:reverse">❄</div>
+  <div class="snowflake" style="top:60px;left:420px;font-size:20px;animation-duration:7s">❄</div>
+  <div class="snowflake" style="top:15px;right:120px;font-size:14px;animation-duration:9s;animation-direction:reverse">❄</div>
+  <div class="snowflake" style="bottom:50px;left:260px;font-size:10px;animation-duration:5s">❄</div>
+  <div class="snowflake" style="bottom:50px;right:200px;font-size:18px;animation-duration:11s;animation-direction:reverse">❄</div>
+
+  <!-- LEFT: TAGGER character -->
+  <div class="char-left" style="left:30px">
+    <div class="head head-tagger" style="position:relative">
+      <div class="helmet"></div>
+    </div>
+    <div class="body-armor armor-tagger"></div>
+    <div class="legs">
+      <div class="leg leg-tagger"></div>
+      <div class="leg leg-tagger"></div>
+    </div>
+    <div class="boots">
+      <div class="boot boot-tagger"></div>
+      <div class="boot boot-tagger"></div>
+    </div>
+    <div class="char-label label-tagger">TAGGER</div>
+  </div>
+
+  <!-- CENTER-LEFT: FROZEN character -->
+  <div class="char-frozen">
+    <div style="position:relative; display:flex; flex-direction:column; align-items:center;">
+      <div class="ice-overlay" style="inset:-6px; top:-10px; bottom:-40px; border-radius:6px;"></div>
+      <div class="head head-runner" style="position:relative">
+        <div class="helmet helmet-runner"></div>
+      </div>
+      <div class="body-armor armor-runner"></div>
+      <div class="legs">
+        <div class="leg leg-runner"></div>
+        <div class="leg leg-runner"></div>
+      </div>
+      <div class="boots">
+        <div class="boot boot-runner"></div>
+        <div class="boot boot-runner"></div>
+      </div>
+    </div>
+    <div class="char-label" style="color:#88ddff; margin-top:8px; font-size:16px;">❄ FROZEN ❄</div>
+  </div>
+
+  <!-- CENTER TITLE -->
+  <div class="center">
+    <div class="plugin-title">
+      <span class="title-freeze">FREEZE</span><span class="title-tag">TAG</span>
+    </div>
+    <div class="subtitle">A MINECRAFT MINIGAME PLUGIN</div>
+    <div class="version-badge">⚡ v1.0.0 &nbsp;·&nbsp; Paper 1.21</div>
+  </div>
+
+  <!-- RIGHT: RUNNER character -->
+  <div class="char-left" style="left:auto; right:30px;">
+    <div class="head head-runner" style="position:relative">
+      <div class="helmet helmet-runner"></div>
+    </div>
+    <div class="body-armor armor-runner"></div>
+    <div class="legs">
+      <div class="leg leg-runner"></div>
+      <div class="leg leg-runner"></div>
+    </div>
+    <div class="boots">
+      <div class="boot boot-runner"></div>
+      <div class="boot boot-runner"></div>
+    </div>
+    <div class="char-label label-runner">RUNNER</div>
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div class="bottom-bar">
+    <span class="badge badge-ice">❄ FREEZE PLAYERS</span>
+    <span class="badge-sep">|</span>
+    <span class="badge badge-green">✔ VOTE FOR MAPS</span>
+    <span class="badge-sep">|</span>
+    <span class="badge badge-gold">★ ROLE CLASSES</span>
+    <span class="badge-sep">|</span>
+    <span class="badge badge-fire">⚔ TAG TO WIN</span>
+  </div>
+
+</div>
+</body>
+</html>
