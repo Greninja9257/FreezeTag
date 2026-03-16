@@ -1,0 +1,33 @@
+name: "Tactician"
+display-name: "&eTactician"
+description:
+  - "&7A team-oriented class focused on group play."
+  - "&aRunner: &7Rescue all frozen teammates nearby."
+  - "&cTagger: &7Slow all runners in a wide area."
+display-item: COMPASS
+speed-modifier: -0.02
+jump-modifier: 0.0
+potion-effects: []
+max-count: 0
+
+ability-runner:
+  enabled: true
+  name: "Group Rescue"
+  description: "&7Unfreeze all frozen runners within &a6 &7blocks."
+  type: UNFREEZE_AOE
+  cooldown: 25
+  duration: 0
+  amplifier: 0
+  radius: 6.0
+  item: TOTEM_OF_UNDYING
+
+ability-tagger:
+  enabled: true
+  name: "Slow Field"
+  description: "&7Apply &cSlowness II &7to all runners within &c8 &7blocks."
+  type: SLOW_AOE
+  cooldown: 22
+  duration: 5
+  amplifier: 1
+  radius: 8.0
+  item: SLIME_BALL

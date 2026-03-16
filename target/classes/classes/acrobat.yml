@@ -1,0 +1,34 @@
+name: "Acrobat"
+display-name: "&dAcrobat"
+description:
+  - "&7An agile class built for quick moves."
+  - "&aRunner: &7Dash forward to break away."
+  - "&cTagger: &7Vanish briefly to ambush runners."
+display-item: ELYTRA
+speed-modifier: 0.02
+jump-modifier: 0.05
+potion-effects:
+  - type: SLOW_FALLING
+    amplifier: 0
+    duration: -1
+max-count: 0
+
+ability-runner:
+  enabled: true
+  name: "Dash"
+  description: "&7Launch forward with great force."
+  type: DASH
+  cooldown: 10
+  duration: 0
+  amplifier: 2
+  item: BLAZE_ROD
+
+ability-tagger:
+  enabled: true
+  name: "Shadow Cloak"
+  description: "&7Turn invisible for &d4 &7seconds to ambush runners."
+  type: INVISIBILITY
+  cooldown: 20
+  duration: 4
+  amplifier: 0
+  item: FERMENTED_SPIDER_EYE

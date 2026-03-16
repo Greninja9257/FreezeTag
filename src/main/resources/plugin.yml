@@ -1,0 +1,29 @@
+name: FreezeTag
+version: 1.0.0
+main: com.freezetag.FreezeTagPlugin
+api-version: '1.21'
+description: A fully customizable Freeze Tag minigame
+authors: [FreezeTag]
+softdepend: [Vault, WorldEdit, PlaceholderAPI]
+
+commands:
+  freezetag:
+    description: Main FreezeTag command
+    usage: /freezetag <subcommand>
+    aliases: [ft]
+    permission: freezetag.play
+  fta:
+    description: FreezeTag admin commands
+    usage: /fta <subcommand>
+    permission: freezetag.admin
+
+permissions:
+  freezetag.play:
+    description: Allows playing FreezeTag
+    default: true
+  freezetag.admin:
+    description: Allows admin commands
+    default: op
+  freezetag.bypass:
+    description: Bypass game restrictions
+    default: op

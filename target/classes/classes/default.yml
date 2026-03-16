@@ -1,0 +1,11 @@
+name: "Default"
+display-name: "&7Default"
+description:
+  - "&7A balanced class with no special abilities."
+  - "&7Perfect for those who rely on skill alone."
+display-item: LEATHER_BOOTS
+speed-modifier: 0.0
+jump-modifier: 0.0
+potion-effects: []
+max-count: 0
+# No ability-runner or ability-tagger — this class has no abilities

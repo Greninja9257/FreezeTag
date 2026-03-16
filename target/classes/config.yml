@@ -1,0 +1,133 @@
+# FreezeTag Plugin Configuration
+# All game settings are configurable here — no code editing needed.
+
+general:
+  prefix: "&b[FreezeTag] &r"
+  debug: false
+
+game:
+  # Percentage of players that become taggers (rounded up, minimum 1)
+  tagger-percentage: 25
+  # Minimum players required to start a game
+  min-players: 4
+  # Maximum players per game (override per arena)
+  max-players: 20
+  # Countdown before game starts (seconds)
+  start-countdown: 10
+  # Game duration in seconds
+  duration: 180
+  # Freeze duration: 0 = must be rescued by teammate; >0 = auto-thaw after N seconds
+  freeze-duration: 0
+  # Whether runners can rescue frozen teammates
+  rescue-enabled: true
+  # Number of hits required to rescue a frozen player
+  rescue-hits: 1
+  # Seconds a runner must wait before they can rescue again (0 = no cooldown)
+  rescue-cooldown: 5
+  # Seconds before a runner can be re-frozen after being unfrozen
+  re-freeze-cooldown: 3
+  # Whether to honor role preferences when assigning roles
+  honor-role-preferences: true
+  # Multiplier for weighted random assignment when player has a role preference
+  preference-weight: 2.0
+
+visuals:
+  # Show sidebar scoreboard
+  scoreboard: true
+  # Show bossbar countdown
+  bossbar: true
+  bossbar-color: RED
+  bossbar-style: SOLID
+  # Apply colored leather armor by role
+  colored-armor: true
+  # Color player names by role
+  colored-names: true
+  # Color codes for each role
+  runner-color: "&a"
+  tagger-color: "&c"
+  frozen-color: "&b"
+  spectator-color: "&7"
+  # Particle effects
+  freeze-particles: true
+  unfreeze-particles: true
+  # Victory fireworks when game ends
+  victory-fireworks: true
+
+lobby:
+  # Lobby countdown before game starts (seconds)
+  countdown: 30
+  # Pause and reset countdown if players drop below min-players mid-countdown
+  pause-on-underpopulation: true
+  # When player count hits this % of max-players, cut countdown to speed-up-countdown
+  speed-up-threshold: 80
+  speed-up-countdown: 15
+  # Countdown when the arena is completely full
+  full-countdown: 10
+  # Skip countdown entirely and start immediately when the arena fills
+  full-instant: false
+  # Enable the lobby GUI
+  gui-enabled: true
+  # Allow players to vote for arenas in lobby
+  arena-voting: true
+  # How long arena voting lasts (seconds)
+  vote-time: 20
+
+protection:
+  # Prevent block breaking during game
+  disable-block-break: true
+  # Prevent block placing during game
+  disable-block-place: true
+  # Prevent item dropping during game
+  disable-item-drop: true
+  # Restrict commands during game
+  restrict-commands: true
+  # Commands allowed during game
+  allowed-commands:
+    - "/freezetag leave"
+    - "/ft leave"
+    - "/freezetag status"
+    - "/ft status"
+  # Enforce arena boundary
+  arena-boundary: true
+  # Action when player leaves arena boundary: TELEPORT_BACK | FREEZE | NOTHING
+  boundary-action: TELEPORT_BACK
+  # Buffer in blocks beyond boundary before action triggers
+  boundary-buffer: 5
+  # Disable hunger depletion during game
+  disable-hunger: true
+  # Disable fall damage during game
+  disable-fall-damage: true
+
+classes:
+  # Enable the class system
+  enabled: true
+  # Allow class selection in lobby GUI
+  lobby-selection: true
+  # Assign random class if player hasn't selected one
+  random-if-unselected: true
+  # Default class IDs
+  default-runner-class: default
+  default-tagger-class: default
+  # Maximum players per class (0 = unlimited)
+  max-per-class: 0
+
+sounds:
+  freeze: ENTITY_PLAYER_HURT_FREEZE
+  unfreeze: BLOCK_GLASS_BREAK
+  game-start: ENTITY_ENDER_DRAGON_GROWL
+  game-end: UI_TOAST_CHALLENGE_COMPLETE
+  countdown-tick: UI_BUTTON_CLICK
+  tagger-win: ENTITY_WITHER_SPAWN
+  runner-win: ENTITY_PLAYER_LEVELUP
+  ability-use: ENTITY_EXPERIENCE_ORB_PICKUP
+  ability-ready: BLOCK_NOTE_BLOCK_PLING
+
+rewards:
+  # Enable Vault economy rewards
+  enabled: false
+  # Reward amounts
+  runner-win: 100
+  tagger-win: 150
+  rescue: 25
+  freeze: 30
+  survive: 50

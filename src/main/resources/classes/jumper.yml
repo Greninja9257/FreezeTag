@@ -1,0 +1,35 @@
+name: "Jumper"
+display-name: "&bJumper"
+description:
+  - "&7An athletic class built for vertical movement."
+  - "&aRunner: &7Leap high to escape over obstacles."
+  - "&cTagger: &7Freeze nearby runners with an AoE wave."
+display-item: RABBIT_FOOT
+speed-modifier: 0.0
+jump-modifier: 0.1
+potion-effects:
+  - type: JUMP_BOOST
+    amplifier: 0
+    duration: -1
+max-count: 0
+
+ability-runner:
+  enabled: true
+  name: "High Jump"
+  description: "&7Gain &bJump Boost V &7for 4 seconds."
+  type: JUMP_BOOST
+  cooldown: 12
+  duration: 4
+  amplifier: 4
+  item: RABBIT_FOOT
+
+ability-tagger:
+  enabled: true
+  name: "Freeze Wave"
+  description: "&7Freeze all runners within &c5 &7blocks."
+  type: FREEZE_AOE
+  cooldown: 30
+  duration: 0
+  amplifier: 0
+  radius: 5.0
+  item: SNOWBALL

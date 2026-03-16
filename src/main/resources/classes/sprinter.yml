@@ -1,0 +1,35 @@
+name: "Sprinter"
+display-name: "&6Sprinter"
+description:
+  - "&7A speed-focused class."
+  - "&aRunner: &7Burst forward to escape taggers."
+  - "&cTagger: &7Slow nearby runners to catch them."
+display-item: FEATHER
+speed-modifier: 0.05
+jump-modifier: 0.0
+potion-effects:
+  - type: SPEED
+    amplifier: 0
+    duration: -1
+max-count: 0
+
+ability-runner:
+  enabled: true
+  name: "Sprint Burst"
+  description: "&7Gain &6Speed III &7for 5 seconds."
+  type: SPEED_BOOST
+  cooldown: 15
+  duration: 5
+  amplifier: 2
+  item: SUGAR
+
+ability-tagger:
+  enabled: true
+  name: "Hunter's Snare"
+  description: "&7Apply &cSlowness III &7to runners within 5 blocks."
+  type: SLOW_AOE
+  cooldown: 18
+  duration: 4
+  amplifier: 2
+  radius: 5.0
+  item: SPIDER_EYE

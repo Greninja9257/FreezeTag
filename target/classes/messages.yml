@@ -1,0 +1,170 @@
+# FreezeTag Messages Configuration
+# Use & for color codes. Placeholders use {key} format.
+# Available placeholders vary by message — see comments.
+
+general:
+  no-permission: "&cYou don't have permission to do that."
+  player-only: "&cThis command can only be used by players."
+  unknown-command: "&cUnknown command. Use /freezetag help for help."
+  reload-success: "&aPlugin reloaded successfully."
+  invalid-player: "&cPlayer '{player}' not found."
+  invalid-arena: "&cArena '{arena}' not found."
+  invalid-number: "&cInvalid number: '{value}'."
+
+game:
+  # {arena} = arena display name
+  join-queue: "&aYou have joined the queue for &b{arena}&a!"
+  join-queue-any: "&aYou have joined the queue! Waiting for an arena..."
+  leave-queue: "&7You have left the queue."
+  leave-game: "&7You have left the game."
+  already-in-queue: "&cYou are already in a queue."
+  already-in-game: "&cYou are already in a game."
+  not-in-queue: "&cYou are not in a queue."
+  not-in-game: "&cYou are not in a game."
+  arena-full: "&cThat arena is full."
+  arena-disabled: "&cThat arena is currently disabled."
+  not-enough-players: "&cNot enough players to start. Need at least {min} players."
+  game-already-running: "&cA game is already running in arena '{arena}'."
+  no-game-running: "&cNo game is running in arena '{arena}'."
+
+  # Countdown messages
+  # {time} = seconds remaining
+  lobby-countdown: "&eGame starting in &b{time} &eseconds..."
+  lobby-countdown-final: "&eGame starting in &c{time}..."
+  game-starting: "&a&lGAME STARTING!"
+
+  # Role assignment
+  # {role} = Runner/Tagger
+  role-assigned-runner: "&aYou have been assigned as a &2&lRUNNER&a! Survive the taggers!"
+  role-assigned-tagger: "&cYou have been assigned as a &4&lTAGGER&c! Freeze all the runners!"
+
+  # Class assignment
+  # {class} = class display name
+  class-assigned: "&7Your class: {class}"
+
+  # Freeze/Unfreeze
+  # {tagger} = tagger name, {runner} = runner name, {rescuer} = rescuer name
+  player-frozen: "&b{runner} &7has been &bfrozen&7 by &c{tagger}&7!"
+  player-unfrozen: "&a{runner} &7has been &aunfrozen&7 by &a{rescuer}&7!"
+  you-are-frozen: "&b&lYOU HAVE BEEN FROZEN! &7Wait for a teammate to rescue you."
+  you-are-unfrozen: "&a&lYOU HAVE BEEN UNFROZEN! &7Run!"
+  auto-thaw: "&a{runner} &7has automatically thawed!"
+  you-auto-thaw: "&a&lYOU HAVE THAWED! &7Run!"
+
+  # Win conditions
+  # {time} = time survived
+  runners-win: "&a&lRUNNERS WIN! &7They survived for {time} seconds!"
+  taggers-win: "&c&lTAGGERS WIN! &7All runners have been frozen!"
+  game-stopped: "&7The game has been stopped by an administrator."
+
+  # Timer messages
+  # {time} = seconds remaining
+  time-remaining: "&eTime remaining: &b{time}s"
+  time-warning-60: "&eOne minute remaining!"
+  time-warning-30: "&c30 seconds remaining!"
+  time-warning-10: "&c&l10 seconds remaining!"
+
+  # Stats
+  # {freezes}, {rescues}, {tags}, {time}
+  stats-header: "&b--- &fYour Stats &b---"
+  stats-freezes: "&7Times frozen: &b{freezes}"
+  stats-rescues: "&7Rescues made: &a{rescues}"
+  stats-tags: "&7Players tagged: &c{tags}"
+  stats-survival: "&7Survival time: &e{time}s"
+
+  # Rewards
+  # {amount}
+  reward-earned: "&aYou earned &6{amount} &acoins!"
+
+  # Spectator
+  spectator-join: "&7You are now spectating the game."
+
+arena:
+  created: "&aArena '{name}' has been created."
+  deleted: "&cArena '{name}' has been deleted."
+  already-exists: "&cArena '{name}' already exists."
+  lobby-set: "&aLobby spawn set for arena '{name}'."
+  runner-spawn-added: "&aRunner spawn added to arena '{name}'."
+  tagger-spawn-added: "&aTagger spawn added to arena '{name}'."
+  bounds-min-set: "&aBounds min set for arena '{name}'."
+  bounds-max-set: "&aBounds max set for arena '{name}'."
+  bounds-set: "&aBounds set for arena '{name}'."
+  enabled: "&aArena '{name}' has been enabled."
+  disabled: "&7Arena '{name}' has been disabled."
+  info-header: "&b--- &fArena: {name} &b---"
+  info-world: "&7World: &f{world}"
+  info-players: "&7Players: &f{min}&7-&f{max}"
+  info-duration: "&7Duration: &f{duration}s"
+  info-enabled: "&7Enabled: {status}"
+  info-spawns: "&7Runner spawns: &f{runner_spawns} &7| Tagger spawns: &f{tagger_spawns}"
+  list-header: "&b--- &fAvailable Arenas &b---"
+  list-entry: "&7- &b{name} &7({players}/{max} players) {status}"
+  no-arenas: "&7No arenas configured yet."
+  game-running: "&cCannot modify arena '{name}' while a game is running."
+
+class:
+  not-found: "&cClass '{class}' not found."
+  wrong-role: "&cThat class is not available for your role."
+  max-reached: "&cThat class is full for this game."
+  selected: "&aClass selected: {class}"
+  must-be-in-lobby: "&cYou can only select a class while in the lobby."
+
+role:
+  preference-set-runner: "&aRole preference set to &2RUNNER&a."
+  preference-set-tagger: "&aRole preference set to &cTAGGER&a."
+  preference-cleared: "&7Role preference cleared."
+
+rescue:
+  on-cooldown: "&cYou must wait &e{time}s &cbefore rescuing again!"
+
+ability:
+  on-cooldown: "&cAbility on cooldown! &7({time}s remaining)"
+  activated: "&aAbility activated: &b{ability}"
+  ready: "&aYour ability &b{ability} &ais ready!"
+  # Ability-specific messages
+  speed-boost: "&6Sprint Burst activated!"
+  jump-boost: "&6High Jump activated!"
+  invisibility: "&6Shadow Cloak activated!"
+  dash: "&6Dash activated!"
+  freeze-aoe: "&cFreeze Wave! &7Froze nearby runners!"
+  slow-aoe: "&cHunter's Snare! &7Slowed nearby runners!"
+  unfreeze-aoe: "&aGroup Rescue! &7Freed nearby teammates!"
+  decoy: "&6Decoy deployed!"
+  shield: "&6Shield activated!"
+
+status:
+  header: "&b--- &fFreezeTag Status &b---"
+  your-status-queue: "&7You are in queue for: &b{arena}"
+  your-status-game: "&7You are playing in: &b{arena}"
+  your-role: "&7Your role: {role}"
+  your-class: "&7Your class: {class}"
+  game-state: "&7Game state: &f{state}"
+  runners-alive: "&7Runners alive: &a{alive}&7/&f{total}"
+  runners-frozen: "&7Runners frozen: &b{frozen}"
+  taggers: "&7Taggers: &c{taggers}"
+  time-left: "&7Time remaining: &e{time}s"
+
+boundary:
+  warning: "&cYou are leaving the arena boundary!"
+  teleported-back: "&cYou have been teleported back inside the arena."
+
+admin:
+  force-freeze: "&7Force froze &b{player}&7."
+  force-unfreeze: "&7Force unfroze &b{player}&7."
+  game-started: "&aGame started in arena '{arena}'."
+  game-stopped-admin: "&7Game stopped in arena '{arena}'."
+  player-not-in-game: "&cPlayer '{player}' is not in a game."
+
+help:
+  header: "&b--- &fFreezeTag Commands &b---"
+  join: "&b/freezetag join [arena] &7- Join a game"
+  leave: "&b/freezetag leave &7- Leave the current game or queue"
+  role: "&b/freezetag role <runner|tagger> &7- Set role preference"
+  class: "&b/freezetag class <name> &7- Select a class"
+  status: "&b/freezetag status &7- View game status"
+  list: "&b/freezetag list &7- List available arenas"
+  admin-header: "&b--- &fAdmin Commands &b---"
+  admin-start: "&b/fta start <arena> &7- Force start a game"
+  admin-stop: "&b/fta stop <arena> &7- Stop a game"
+  admin-reload: "&b/fta reload &7- Reload configuration"
+  admin-arena: "&b/fta arena <create|delete|...> &7- Arena management"
