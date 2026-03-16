@@ -470,6 +470,16 @@ public class FreezeTagCommand implements CommandExecutor, TabCompleter {
                     MessageUtil.sendMessage(sender, "general.invalid-arena", Map.of("arena", name));
                 }
             }
+            case "setvoteonly" -> {
+                if (args.length < 3) { MessageUtil.send(sender, "&cUsage: /fta arena setvoteonly <name> <true|false>"); return; }
+                String name = args[1];
+                boolean voteOnly = Boolean.parseBoolean(args[2]);
+                Arena arena = plugin.getArenaManager().getArena(name);
+                if (arena == null) { MessageUtil.sendMessage(sender, "general.invalid-arena", Map.of("arena", name)); return; }
+                arena.setVoteOnly(voteOnly);
+                plugin.getArenaManager().saveArena(arena);
+                MessageUtil.send(sender, "&aArena &f" + name + (voteOnly ? "&a set to vote-only." : "&a vote-only disabled."));
+            }
             case "list" -> {
                 listArenas(sender);
             }

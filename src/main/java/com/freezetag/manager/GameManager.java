@@ -71,12 +71,14 @@ public class GameManager {
                 MessageUtil.sendMessage(player, "game.arena-disabled");
                 return false;
             }
-        } else {
-            // Pick the first enabled arena if none specified
-            List<Arena> enabled = plugin.getArenaManager().getEnabledArenas();
-            if (!enabled.isEmpty()) {
-                arena = enabled.get(0);
+            if (arena.isVoteOnly()) {
+                MessageUtil.send(player, "&cThat arena is vote-only. Join the vote lobby with &b/ft vl join&c.");
+                return false;
             }
+        } else {
+            // Pick the first enabled, non-vote-only arena
+            List<Arena> enabled = plugin.getArenaManager().getEnabledArenas();
+            arena = enabled.stream().filter(a -> !a.isVoteOnly()).findFirst().orElse(null);
         }
 
         if (arena == null) {

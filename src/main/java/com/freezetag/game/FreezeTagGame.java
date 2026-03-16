@@ -807,6 +807,12 @@ public class FreezeTagGame {
             Player p = Bukkit.getPlayer(entry.getKey());
             if (p == null || !p.isOnline()) continue;
 
+            // Zero out velocity every tick so jump impulse can't accumulate
+            org.bukkit.util.Vector vel = p.getVelocity();
+            if (vel.getY() > 0 || Math.abs(vel.getX()) > 0.01 || Math.abs(vel.getZ()) > 0.01) {
+                p.setVelocity(new org.bukkit.util.Vector(0, 0, 0));
+            }
+
             Location frozenLoc = gp.getFreezeLocation();
             if (frozenLoc == null) {
                 gp.setFreezeLocation(p.getLocation());

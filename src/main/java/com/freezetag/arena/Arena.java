@@ -20,6 +20,7 @@ public class Arena {
     private String displayName;
     private String worldName;
     private boolean enabled;
+    private boolean voteOnly;
     private int minPlayers;
     private int maxPlayers;
     private int duration; // seconds, 0 = use global config
@@ -115,6 +116,7 @@ public class Arena {
         config.set("display-name", displayName);
         config.set("world", worldName);
         config.set("enabled", enabled);
+        config.set("vote-only", voteOnly);
         config.set("min-players", minPlayers);
         config.set("max-players", maxPlayers);
         config.set("duration", duration);
@@ -155,6 +157,7 @@ public class Arena {
         arena.displayName = config.getString("display-name", name);
         arena.worldName = config.getString("world", "world");
         arena.enabled = config.getBoolean("enabled", false);
+        arena.voteOnly = config.getBoolean("vote-only", false);
         arena.minPlayers = config.getInt("min-players", 4);
         arena.maxPlayers = config.getInt("max-players", 16);
         arena.duration = config.getInt("duration", 0);
@@ -268,6 +271,8 @@ public class Arena {
 
     public boolean isEnabled() { return enabled; }
     public void setEnabled(boolean enabled) { this.enabled = enabled; }
+    public boolean isVoteOnly() { return voteOnly; }
+    public void setVoteOnly(boolean voteOnly) { this.voteOnly = voteOnly; }
 
     public int getMinPlayers() { return minPlayers; }
     public void setMinPlayers(int minPlayers) { this.minPlayers = minPlayers; }
