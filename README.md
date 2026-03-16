@@ -1,7 +1,7 @@
 # FreezeTag
 
 A fully customizable Freeze Tag minigame plugin for Paper 1.21.x (tested on 1.21.11).
-
+Demo Minecraft Server IP: FreezeTagXD.minekeep.gg
 ## Gameplay
 
 Runners try to survive until the timer runs out. Taggers hunt them down and freeze them by hitting them. Frozen runners are stuck in place until a teammate rescues them by hitting them. If all runners are frozen before time is up, the taggers win. If any runner survives until time runs out, the runners win.
