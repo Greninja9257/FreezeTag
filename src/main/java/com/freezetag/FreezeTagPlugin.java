@@ -38,6 +38,9 @@ public class FreezeTagPlugin extends JavaPlugin {
     // GUI
     private LobbyGUI lobbyGUI;
 
+    // Vote Lobby
+    private com.freezetag.game.VoteLobby voteLobby;
+
     // Economy (Vault)
     private Economy economy;
 
@@ -74,6 +77,8 @@ public class FreezeTagPlugin extends JavaPlugin {
         gameManager = new GameManager(this);
         scoreboardManager = new ScoreboardManager();
         lobbyGUI = new LobbyGUI(this);
+        voteLobby = new com.freezetag.game.VoteLobby(this);
+        loadVoteLobbySpawn();
 
         // Load data
         arenaManager.loadAll();
@@ -94,6 +99,8 @@ public class FreezeTagPlugin extends JavaPlugin {
             getLogger().info("PlaceholderAPI hooked — %freezetag_*% placeholders registered.");
         }
 
+        lobbyGUI.startRainbowTask();
+
         getLogger().info("FreezeTag v" + getDescription().getVersion() + " enabled!");
         getLogger().info("Loaded " + arenaManager.getAllArenas().size() + " arena(s) and "
                 + (classManager.getRunnerClasses().size() + classManager.getTaggerClasses().size()) + " class(es).");
@@ -101,6 +108,9 @@ public class FreezeTagPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (lobbyGUI != null) lobbyGUI.stopRainbowTask();
+        if (voteLobby != null) voteLobby.shutdown();
+
         // Stop all active games and restore players
         if (gameManager != null) {
             gameManager.stopAllGames();
@@ -223,6 +233,46 @@ public class FreezeTagPlugin extends JavaPlugin {
     public GameManager getGameManager() { return gameManager; }
     public ScoreboardManager getScoreboardManager() { return scoreboardManager; }
     public LobbyGUI getLobbyGUI() { return lobbyGUI; }
+    public com.freezetag.game.VoteLobby getVoteLobby() { return voteLobby; }
     public Economy getEconomy() { return economy; }
     public FileConfiguration getMessagesConfig() { return messagesConfig; }
+
+    // -------------------------------------------------------------------------
+    // Vote lobby spawn persistence
+    // -------------------------------------------------------------------------
+
+    public void saveVoteLobbySpawn(org.bukkit.Location loc) {
+        if (voteLobby == null) return;
+        voteLobby.setSpawn(loc);
+        File dataFile = new File(getDataFolder(), "vote-lobby.yml");
+        org.bukkit.configuration.file.YamlConfiguration cfg =
+                org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(dataFile);
+        cfg.set("spawn.world",  loc.getWorld() != null ? loc.getWorld().getName() : "world");
+        cfg.set("spawn.x",  loc.getX());
+        cfg.set("spawn.y",  loc.getY());
+        cfg.set("spawn.z",  loc.getZ());
+        cfg.set("spawn.yaw",   loc.getYaw());
+        cfg.set("spawn.pitch", loc.getPitch());
+        try { cfg.save(dataFile); } catch (java.io.IOException e) {
+            getLogger().warning("Could not save vote-lobby.yml: " + e.getMessage());
+        }
+    }
+
+    private void loadVoteLobbySpawn() {
+        File dataFile = new File(getDataFolder(), "vote-lobby.yml");
+        if (!dataFile.exists()) return;
+        org.bukkit.configuration.file.YamlConfiguration cfg =
+                org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(dataFile);
+        String worldName = cfg.getString("spawn.world");
+        if (worldName == null) return;
+        org.bukkit.World world = org.bukkit.Bukkit.getWorld(worldName);
+        if (world == null) return;
+        double x   = cfg.getDouble("spawn.x");
+        double y   = cfg.getDouble("spawn.y");
+        double z   = cfg.getDouble("spawn.z");
+        float  yaw   = (float) cfg.getDouble("spawn.yaw");
+        float  pitch = (float) cfg.getDouble("spawn.pitch");
+        voteLobby.setSpawn(new org.bukkit.Location(world, x, y, z, yaw, pitch));
+        getLogger().info("Vote lobby spawn loaded.");
+    }
 }

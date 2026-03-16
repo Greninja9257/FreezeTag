@@ -277,6 +277,11 @@ public class GameManager {
         return Collections.unmodifiableCollection(activeGames.values());
     }
 
+    /** Register a game created externally (e.g. from VoteLobby) into the active games map. */
+    public void registerExternalGame(String arenaName, FreezeTagGame game) {
+        activeGames.put(arenaName.toLowerCase(), game);
+    }
+
     // -------------------------------------------------------------------------
     // Role and class management for queued players
     // -------------------------------------------------------------------------

@@ -42,9 +42,11 @@ public class LobbyListener implements Listener {
 
         if (!plugin.getLobbyGUI().isLobbyItem(item)) return;
 
-        // Only handle if this player is in a lobby queue
+        // Allow if in a game queue OR in the vote lobby
         FreezeTagGame game = plugin.getGameManager().getPlayerGame(player.getUniqueId());
-        if (game == null && !plugin.getGameManager().isInQueue(player.getUniqueId())) return;
+        boolean inVoteLobby = plugin.getVoteLobby() != null
+                && plugin.getVoteLobby().isInLobby(player.getUniqueId());
+        if (game == null && !plugin.getGameManager().isInQueue(player.getUniqueId()) && !inVoteLobby) return;
 
         event.setCancelled(true);
         plugin.getLobbyGUI().handleItemInteract(player, item);
@@ -68,6 +70,13 @@ public class LobbyListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onInventoryClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player player)) return;
+
+        // Block moving lobby items inside the player's own inventory
+        if (plugin.getLobbyGUI().isLobbyItem(event.getCurrentItem())
+                || plugin.getLobbyGUI().isLobbyItem(event.getCursor())) {
+            event.setCancelled(true);
+            return;
+        }
 
         String title = event.getView().getTitle();
         if (!plugin.getLobbyGUI().isFreezeTagGUI(title)) return;
@@ -101,6 +110,10 @@ public class LobbyListener implements Listener {
         if (plugin.getGameManager().isInQueue(uuid)
                 && plugin.getGameManager().getPlayerGame(uuid) == null) {
             plugin.getGameManager().leaveQueue(player);
+        }
+
+        if (plugin.getVoteLobby() != null && plugin.getVoteLobby().isInLobby(uuid)) {
+            plugin.getVoteLobby().removePlayer(player);
         }
 
         plugin.getLobbyGUI().removeOpenMenu(uuid);

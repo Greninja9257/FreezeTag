@@ -195,6 +195,95 @@ public class ScoreboardManager {
         }
     }
 
+    // -------------------------------------------------------------------------
+    // Vote lobby scoreboard
+    // -------------------------------------------------------------------------
+
+    /** Create and assign a vote-lobby scoreboard to a player. */
+    public void createVoteLobbyScoreboard(Player player, com.freezetag.game.VoteLobby vl) {
+        if (player == null || vl == null) return;
+        Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
+        Objective obj = board.registerNewObjective(
+                OBJECTIVE_NAME, Criteria.DUMMY, MessageUtil.colorize("&b&lFreeze Tag"));
+        obj.setDisplaySlot(DisplaySlot.SIDEBAR);
+        playerScoreboards.put(player.getUniqueId(), board);
+        player.setScoreboard(board);
+        updateVoteLobbyScoreboard(player, vl);
+    }
+
+    /** Refresh the vote-lobby scoreboard lines for one player. */
+    public void updateVoteLobbyScoreboard(Player player, com.freezetag.game.VoteLobby vl) {
+        if (player == null || vl == null) return;
+        Scoreboard board = playerScoreboards.get(player.getUniqueId());
+        if (board == null) return;
+        Objective obj = board.getObjective(OBJECTIVE_NAME);
+        if (obj == null) return;
+
+        for (String entry : board.getEntries()) board.resetScores(entry);
+
+        int minP = vl.getPlugin().getConfig().getInt("vote-lobby.min-players", 2);
+        String classId = vl.getPlayerClassId(player.getUniqueId());
+        com.freezetag.classes.PlayerClass pc = classId != null
+                ? vl.getPlugin().getClassManager().getClass(classId) : null;
+        String classDisplay = pc != null ? MessageUtil.colorize(pc.getDisplayName()) : "§7None";
+
+        com.freezetag.game.RolePreference pref = vl.getRolePreference(player.getUniqueId());
+        String roleDisplay = switch (pref) {
+            case RUNNER -> "§aRunner";
+            case TAGGER -> "§cTagger";
+            default     -> "§7Waiting...";
+        };
+
+        // Status line
+        String statusLine;
+        if (vl.getState() == com.freezetag.game.VoteLobby.State.COUNTING_DOWN) {
+            statusLine = "§e§lStarting: §f" + vl.getCurrentCountdown() + "s";
+        } else {
+            statusLine = "§7Waiting for players...";
+        }
+
+        // Leading vote
+        java.util.Map<String, Integer> votes = vl.getVoteCounts();
+        String voteStr;
+        if (votes.isEmpty()) {
+            voteStr = "§7No votes yet";
+        } else {
+            String topKey = votes.entrySet().stream()
+                    .max(java.util.Map.Entry.comparingByValue())
+                    .map(java.util.Map.Entry::getKey).orElse(null);
+            if (topKey != null) {
+                com.freezetag.arena.Arena top = vl.getPlugin().getArenaManager().getArena(topKey);
+                String topName = top != null ? MessageUtil.colorize(top.getDisplayName()) : topKey;
+                int cnt = votes.get(topKey);
+                voteStr = "§f" + topName + " §7(" + cnt + ")";
+            } else {
+                voteStr = "§7No votes yet";
+            }
+        }
+
+        int score = 12;
+        obj.getScore("§r§f§r").setScore(score--);
+        obj.getScore(truncate(statusLine, 40)).setScore(score--);
+        obj.getScore("§r§a§r").setScore(score--);
+        obj.getScore("§ePlayers: §f" + vl.getPlayerCount() + "§7/§f" + minP).setScore(score--);
+        obj.getScore("§r§b§r").setScore(score--);
+        obj.getScore("§fRole: " + roleDisplay).setScore(score--);
+        obj.getScore(truncate("§fClass: " + classDisplay, 40)).setScore(score--);
+        obj.getScore("§r§c§r").setScore(score--);
+        obj.getScore("§d§lLeading Vote:").setScore(score--);
+        obj.getScore(truncate("  " + voteStr, 40)).setScore(score--);
+        obj.getScore("§r§d§r").setScore(score--);
+    }
+
+    /** Refresh vote-lobby scoreboards for all players in the lobby. */
+    public void updateAllVoteLobby(com.freezetag.game.VoteLobby vl) {
+        if (vl == null) return;
+        for (java.util.UUID uuid : vl.getPlayers()) {
+            Player p = Bukkit.getPlayer(uuid);
+            if (p != null && p.isOnline()) updateVoteLobbyScoreboard(p, vl);
+        }
+    }
+
     /**
      * Update scoreboards for all players in the game.
      */

@@ -241,9 +241,60 @@ public class FreezeTagCommand implements CommandExecutor, TabCompleter {
                 game.unfreezePlayer(null, target);
                 MessageUtil.sendMessage(sender, "admin.force-unfreeze", Map.of("player", args[1]));
             }
+            case "vl", "votelobby" -> {
+                if (!(sender instanceof Player player)) {
+                    MessageUtil.send(sender, "&cThis command requires a player."); return true;
+                }
+                handleVoteLobbyCommand(player, args.length > 1 ? args[1] : "help");
+            }
             default -> sendAdminHelp(sender);
         }
         return true;
+    }
+
+    private void handleVoteLobbyCommand(Player player, String sub) {
+        com.freezetag.game.VoteLobby vl = plugin.getVoteLobby();
+        switch (sub.toLowerCase()) {
+            case "setspawn" -> {
+                plugin.saveVoteLobbySpawn(player.getLocation());
+                MessageUtil.send(player, "&aVote lobby spawn set to your location!");
+            }
+            case "join" -> {
+                if (!vl.isConfigured()) {
+                    MessageUtil.send(player, "&cVote lobby spawn not set. Use /fta vl setspawn first.");
+                    return;
+                }
+                if (vl.isInLobby(player.getUniqueId())) {
+                    MessageUtil.send(player, "&cYou are already in the vote lobby.");
+                    return;
+                }
+                if (plugin.getGameManager().getPlayerGame(player.getUniqueId()) != null
+                        || plugin.getGameManager().isInQueue(player.getUniqueId())) {
+                    MessageUtil.send(player, "&cLeave your current game before joining the vote lobby.");
+                    return;
+                }
+                vl.addPlayer(player);
+            }
+            case "leave" -> {
+                if (!vl.isInLobby(player.getUniqueId())) {
+                    MessageUtil.send(player, "&cYou are not in the vote lobby.");
+                    return;
+                }
+                vl.removePlayer(player);
+            }
+            case "info" -> {
+                MessageUtil.send(player, "&b&lVote Lobby Info");
+                MessageUtil.send(player, "&7Players: &f" + vl.getPlayerCount());
+                MessageUtil.send(player, "&7State: &f" + vl.getState());
+                MessageUtil.send(player, "&7Configured: &f" + vl.isConfigured());
+            }
+            default -> {
+                MessageUtil.send(player, "&b/fta vl setspawn &7— Set vote lobby spawn");
+                MessageUtil.send(player, "&b/fta vl join &7— Join the vote lobby");
+                MessageUtil.send(player, "&b/fta vl leave &7— Leave the vote lobby");
+                MessageUtil.send(player, "&b/fta vl info &7— Show vote lobby status");
+            }
+        }
     }
 
     // -------------------------------------------------------------------------

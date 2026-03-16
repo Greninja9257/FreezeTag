@@ -51,9 +51,10 @@ public class FreezeTagGame {
     private static final Random RANDOM = new Random();
 
     private final FreezeTagPlugin plugin;
-    private final Arena arena;
+    private Arena arena;
     private final Map<UUID, GamePlayer> players = new HashMap<>();
     private final Map<UUID, RolePreference> queuePreferences = new HashMap<>();
+    private final Map<UUID, String> arenaVotes = new HashMap<>();
 
     private GameState state = GameState.WAITING;
     private int timeLeft = 0;
@@ -198,6 +199,16 @@ public class FreezeTagGame {
     public void startGame() {
         if (state == GameState.ENDING) return;
         state = GameState.IN_GAME;
+
+        // Apply map vote result
+        if (plugin.getConfig().getBoolean("lobby.arena-voting", true)) {
+            Arena voted = getVotedArena();
+            if (!voted.getName().equals(arena.getName())) {
+                arena = voted;
+                broadcastToGame("&d&lMap Vote: &fPlaying on &d" + voted.getDisplayName() + "&f!");
+            }
+        }
+        arenaVotes.clear();
 
         FileConfiguration config = plugin.getConfig();
         int configDuration = arena.getDuration() > 0 ? arena.getDuration()
@@ -907,6 +918,7 @@ public class FreezeTagGame {
         GamePlayer gp = players.remove(player.getUniqueId());
         queuePreferences.remove(player.getUniqueId());
         autoThawCountdown.remove(player.getUniqueId());
+        arenaVotes.remove(player.getUniqueId());
 
         if (gp != null) {
             // Remove class modifiers
@@ -1103,12 +1115,9 @@ public class FreezeTagGame {
         String soundName = plugin.getConfig().getString("sounds." + configKey, "");
         if (soundName.isEmpty()) return;
 
-        Sound sound;
-        try {
-            sound = Sound.valueOf(soundName.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            return; // Invalid sound name — silently ignore
-        }
+        Sound sound = org.bukkit.Registry.SOUNDS.get(
+                org.bukkit.NamespacedKey.minecraft(soundName.toLowerCase()));
+        if (sound == null) return;
 
         for (UUID uuid : players.keySet()) {
             Player p = Bukkit.getPlayer(uuid);
@@ -1223,6 +1232,34 @@ public class FreezeTagGame {
     // -------------------------------------------------------------------------
 
     public Arena getArena() { return arena; }
+
+    // --- Map voting ---
+
+    public void voteArena(UUID playerUUID, String arenaName) {
+        arenaVotes.put(playerUUID, arenaName);
+    }
+
+    public String getPlayerVote(UUID playerUUID) {
+        return arenaVotes.get(playerUUID);
+    }
+
+    public Map<String, Integer> getVoteCounts() {
+        Map<String, Integer> counts = new HashMap<>();
+        for (String name : arenaVotes.values()) counts.merge(name, 1, Integer::sum);
+        return counts;
+    }
+
+    /** Returns the arena with the most votes, falling back to the current arena. */
+    public Arena getVotedArena() {
+        Map<String, Integer> counts = getVoteCounts();
+        if (counts.isEmpty()) return arena;
+        String winner = counts.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey).orElse(null);
+        if (winner == null) return arena;
+        Arena voted = plugin.getArenaManager().getArena(winner);
+        return voted != null ? voted : arena;
+    }
     public GameState getState() { return state; }
     public int getTimeLeft() { return timeLeft; }
     public int getLobbyCountdown() { return lobbyCountdown; }
