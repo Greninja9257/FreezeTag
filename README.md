@@ -308,6 +308,12 @@ If WorldGuard is installed, set `pvp allow` on your arena region — otherwise h
 
 ---
 
+## Wiki
+
+Full documentation is available on the [FreezeTag Wiki](https://github.com/Greninja9257/FreezeTag/wiki/FreezeTag-Wiki).
+
+---
+
 ## Building from Source
 
 ```
