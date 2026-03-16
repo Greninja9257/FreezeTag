@@ -1,5 +1,7 @@
 # FreezeTag
 
+![Logo](assets/logo.png)
+
 ![FreezeTag Banner](assets/banners/main%20banner.png)
 
 A fully customizable Freeze Tag minigame plugin for Paper 1.21.x (tested on 1.21.11).
