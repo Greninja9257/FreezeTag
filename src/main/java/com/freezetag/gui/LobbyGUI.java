@@ -162,7 +162,12 @@ public class LobbyGUI {
                 "leave"
         ));
 
-        player.getInventory().setHeldItemSlot(0);
+        // Only switch to slot 0 if the player doesn't already have lobby items
+        // (i.e. first time giving items, not a refresh)
+        if (player.getInventory().getHeldItemSlot() > 4
+                || !isLobbyItem(player.getInventory().getItem(player.getInventory().getHeldItemSlot()))) {
+            player.getInventory().setHeldItemSlot(0);
+        }
     }
 
     private ItemStack buildVoteItem(Player player, FreezeTagGame game) {
@@ -275,7 +280,10 @@ public class LobbyGUI {
                 "leave_vl"
         ));
 
-        player.getInventory().setHeldItemSlot(0);
+        if (player.getInventory().getHeldItemSlot() > 4
+                || !isLobbyItem(player.getInventory().getItem(player.getInventory().getHeldItemSlot()))) {
+            player.getInventory().setHeldItemSlot(0);
+        }
     }
 
     private ItemStack buildVoteItemFromVoteLobby(Player player, VoteLobby voteLobby) {
