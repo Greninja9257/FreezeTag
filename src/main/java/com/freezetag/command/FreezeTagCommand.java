@@ -129,6 +129,45 @@ public class FreezeTagCommand implements CommandExecutor, TabCompleter {
             case "list" -> {
                 listArenas(sender);
             }
+            case "votelobby", "vl" -> {
+                if (!(sender instanceof Player player)) {
+                    MessageUtil.sendMessage(sender, "general.player-only");
+                    return true;
+                }
+                if (!player.hasPermission("freezetag.play")) {
+                    MessageUtil.sendMessage(sender, "general.no-permission");
+                    return true;
+                }
+                String vlSub = args.length > 1 ? args[1] : "join";
+                switch (vlSub.toLowerCase()) {
+                    case "join" -> {
+                        com.freezetag.game.VoteLobby vl = plugin.getVoteLobby();
+                        if (!vl.isConfigured()) {
+                            MessageUtil.send(player, "&cVote lobby is not set up yet.");
+                            return true;
+                        }
+                        if (vl.isInLobby(player.getUniqueId())) {
+                            MessageUtil.send(player, "&cYou are already in the vote lobby.");
+                            return true;
+                        }
+                        if (plugin.getGameManager().getPlayerGame(player.getUniqueId()) != null
+                                || plugin.getGameManager().isInQueue(player.getUniqueId())) {
+                            MessageUtil.send(player, "&cLeave your current game before joining the vote lobby.");
+                            return true;
+                        }
+                        vl.addPlayer(player);
+                    }
+                    case "leave" -> {
+                        com.freezetag.game.VoteLobby vl = plugin.getVoteLobby();
+                        if (!vl.isInLobby(player.getUniqueId())) {
+                            MessageUtil.send(player, "&cYou are not in the vote lobby.");
+                            return true;
+                        }
+                        vl.removePlayer(player);
+                    }
+                    default -> MessageUtil.send(player, "&bUsage: /ft vl [join|leave]");
+                }
+            }
             case "help" -> {
                 sendPlayerHelp(sender);
             }
