@@ -1,14 +1,19 @@
 # FreezeTag
 
-A fully customizable Freeze Tag minigame plugin for Paper 1.21.x (tested on 1.21.11).
+![FreezeTag Banner](assets/banners/main%20banner.png)
 
+A fully customizable Freeze Tag minigame plugin for Paper 1.21.x (tested on 1.21.11).
 
 ## Demo Minecraft Server IP
 FreezeTagXD.minekeep.gg
 
 ## Gameplay
 
+![Roles](assets/banners/roles%20banner.png)
+
 Runners try to survive until the timer runs out. Taggers hunt them down and freeze them by hitting them (left-click). Frozen runners are completely stuck in place — they cannot move or jump — until a teammate rescues them by hitting them. If all runners are frozen before time is up, the taggers win. If any runner survives until time runs out, the runners win.
+
+![Features](assets/banners/features%20banner.png)
 
 ## Requirements
 
@@ -83,6 +88,18 @@ All player commands use `/freezetag` or the alias `/ft`.
 | `/ft status` | Show your current game status |
 | `/ft list` | List active games |
 | `/ft help` | Show help |
+
+---
+
+## GUI Screenshots
+
+| Role Selection | Class Selection |
+|:---:|:---:|
+| ![Role Menu](assets/gui/role.png) | ![Class Menu](assets/gui/class.png) |
+
+| Class Description | Map Vote |
+|:---:|:---:|
+| ![Class Description](assets/gui/class%20desc.png) | ![Vote Menu](assets/gui/vote.png) |
 
 ---
 
