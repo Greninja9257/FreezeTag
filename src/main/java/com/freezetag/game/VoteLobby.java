@@ -42,6 +42,7 @@ public class VoteLobby {
     private final Map<UUID, GameMode>     savedGameModes   = new HashMap<>();
     private final Map<UUID, Double>       savedHealth      = new HashMap<>();
     private final Map<UUID, Integer>      savedFood        = new HashMap<>();
+    private final Map<UUID, Location>     savedLocations   = new HashMap<>();
 
     private State state = State.WAITING;
     private int   currentCountdown;
@@ -76,6 +77,7 @@ public class VoteLobby {
         savedGameModes.put(uuid, player.getGameMode());
         savedHealth.put(uuid, player.getHealth());
         savedFood.put(uuid, player.getFoodLevel());
+        savedLocations.put(uuid, player.getLocation().clone());
 
         players.add(uuid);
         playerRoles.put(uuid, RolePreference.NONE);
@@ -173,6 +175,7 @@ public class VoteLobby {
         votes.clear();
         playerClasses.clear();
         playerRoles.clear();
+        savedLocations.clear();
     }
 
     // -------------------------------------------------------------------------
@@ -282,6 +285,7 @@ public class VoteLobby {
         savedGameModes.clear();
         savedHealth.clear();
         savedFood.clear();
+        savedLocations.clear();
         state = State.WAITING;
         currentCountdown = plugin.getConfig().getInt("vote-lobby.countdown", 60);
     }
@@ -300,6 +304,8 @@ public class VoteLobby {
         if (health != null) player.setHealth(Math.min(health, player.getMaxHealth()));
         Integer food = savedFood.remove(uuid);
         if (food != null) player.setFoodLevel(food);
+        Location loc = savedLocations.remove(uuid);
+        if (loc != null && loc.getWorld() != null) player.teleport(loc);
     }
 
     private void broadcastToAll(String msg) {
