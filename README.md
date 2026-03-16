@@ -2,12 +2,13 @@
 
 A fully customizable Freeze Tag minigame plugin for Paper 1.21.x (tested on 1.21.11).
 
-## Demo Minecraft Server IP 
+
+## Demo Minecraft Server IP
 FreezeTagXD.minekeep.gg
 
 ## Gameplay
 
-Runners try to survive until the timer runs out. Taggers hunt them down and freeze them by hitting them. Frozen runners are stuck in place until a teammate rescues them by hitting them. If all runners are frozen before time is up, the taggers win. If any runner survives until time runs out, the runners win.
+Runners try to survive until the timer runs out. Taggers hunt them down and freeze them by hitting them (left-click). Frozen runners are completely stuck in place — they cannot move or jump — until a teammate rescues them by hitting them. If all runners are frozen before time is up, the taggers win. If any runner survives until time runs out, the runners win.
 
 ## Requirements
 
@@ -92,11 +93,13 @@ When you join a queue, four items appear in your hotbar. Right-click them:
 | Slot | Item | Action |
 |---|---|---|
 | 0 | Book (your class icon) | Open class selection menu |
-| 2 | Colored glass | Open role preference menu |
-| 4 | Map | Show arena info |
+| 2 | Colored glass pane | Open role preference menu |
+| 4 | Map | Open arena info panel |
 | 8 | Barrier | Leave the queue |
 
-The sidebar scoreboard shows your selected class at all times — it shows `None` if you haven't picked one yet.
+- Lobby items **cannot be moved or dropped** — they are locked in place.
+- The sidebar scoreboard shows your selected class and role preference at all times during the lobby.
+- Role: shows `Waiting...` until the game actually starts and roles are assigned.
 
 ---
 
@@ -112,6 +115,10 @@ All admin commands use `/fta`. Requires `freezetag.admin` (op by default).
 | `/fta forcefreeze <player>` | Freeze a player |
 | `/fta forceunfreeze <player>` | Unfreeze a player |
 | `/fta arena ...` | Arena management (see above) |
+| `/fta vl setspawn` | Set the vote lobby spawn at your location |
+| `/fta vl join` | Join the vote lobby |
+| `/fta vl leave` | Leave the vote lobby |
+| `/fta vl info` | Show vote lobby status |
 
 ---
 
@@ -206,6 +213,27 @@ The lobby countdown adjusts automatically:
 - **Speeds up** to `lobby.speed-up-countdown` when the arena is `lobby.speed-up-threshold`% full
 - **Short countdown** (`lobby.full-countdown`) or instant start (`lobby.full-instant`) when completely full
 
+Players who join mid-countdown immediately receive the hotbar GUI and scoreboard — no waiting for the next cycle.
+
+---
+
+## Vote Lobby
+
+The vote lobby is a universal pre-game lobby where players vote on which arena to play — no arena is pre-selected.
+
+### Setup
+
+```
+/fta vl setspawn     Set the vote lobby spawn at your current location
+/fta vl join         Join the vote lobby
+/fta vl leave        Leave the vote lobby
+/fta vl info         Show vote lobby status
+```
+
+Players in the vote lobby get the same hotbar GUI as the normal lobby except slot 4 is a **rainbow cycling glass block** — right-click it to open the map vote menu and choose an arena. When the countdown expires the arena with the most votes is chosen and the game starts immediately.
+
+The sidebar scoreboard shows countdown/waiting status, player count, your role preference, your selected class, and the currently leading arena vote — updated every second.
+
 ---
 
 ## Configuration
@@ -229,6 +257,10 @@ lobby:
   speed-up-countdown: 15
   full-countdown: 10
   full-instant: false
+
+vote-lobby:
+  min-players: 2
+  countdown: 60
 
 protection:
   disable-block-break: true
