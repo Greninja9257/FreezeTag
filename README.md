@@ -1,6 +1,7 @@
 # FreezeTag
 
 A fully customizable Freeze Tag minigame plugin for Paper 1.21.x (tested on 1.21.11).
+
 Demo Minecraft Server IP: FreezeTagXD.minekeep.gg
 ## Gameplay
 
