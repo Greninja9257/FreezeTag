@@ -64,6 +64,7 @@ public class FreezeTagGame {
     private BukkitTask mainTickTask;
     private BukkitTask freezeEnforceTask;
     private BukkitTask scoreboardUpdateTask;
+    private BukkitTask compassUpdateTask;
 
     // Visuals
     private BossBar bossBar;
@@ -274,6 +275,14 @@ public class FreezeTagGame {
                 plugin.getScoreboardManager().updateAll(FreezeTagGame.this);
             }
         }.runTaskTimer(plugin, 40L, 40L);
+
+        // Compass update (every 20 ticks = 1 second)
+        compassUpdateTask = new BukkitRunnable() {
+            @Override
+            public void run() {
+                updateTaggerCompasses();
+            }
+        }.runTaskTimer(plugin, 20L, 20L);
     }
 
     private void tickGame() {
@@ -589,6 +598,19 @@ public class FreezeTagGame {
 
         // Apply role armor
         applyRoleArmor(player, gp);
+
+        // Give taggers a tracking compass
+        if (gp.isTagger()) {
+            ItemStack compass = new ItemStack(Material.COMPASS);
+            org.bukkit.inventory.meta.ItemMeta meta = compass.getItemMeta();
+            if (meta != null) {
+                meta.setDisplayName(MessageUtil.colorize("&c&lPlayer Tracking Compass"));
+                meta.setLore(java.util.Arrays.asList(
+                        MessageUtil.colorize("&7Points to the nearest runner.")));
+                compass.setItemMeta(meta);
+            }
+            player.getInventory().setItem(8, compass);
+        }
 
         // Notify player of their role
         String roleKey = gp.isRunner() ? "game.role-assigned-runner" : "game.role-assigned-tagger";
@@ -1137,6 +1159,39 @@ public class FreezeTagGame {
         if (mainTickTask != null) { mainTickTask.cancel(); mainTickTask = null; }
         if (freezeEnforceTask != null) { freezeEnforceTask.cancel(); freezeEnforceTask = null; }
         if (scoreboardUpdateTask != null) { scoreboardUpdateTask.cancel(); scoreboardUpdateTask = null; }
+        if (compassUpdateTask != null) { compassUpdateTask.cancel(); compassUpdateTask = null; }
+    }
+
+    private void updateTaggerCompasses() {
+        List<Player> runners = new ArrayList<>();
+        for (Map.Entry<UUID, GamePlayer> entry : players.entrySet()) {
+            GamePlayer gp = entry.getValue();
+            if (!gp.isRunner() || gp.isFrozen()) continue;
+            Player p = Bukkit.getPlayer(entry.getKey());
+            if (p != null && p.isOnline()) runners.add(p);
+        }
+        if (runners.isEmpty()) return;
+
+        for (Map.Entry<UUID, GamePlayer> entry : players.entrySet()) {
+            if (!entry.getValue().isTagger()) continue;
+            Player tagger = Bukkit.getPlayer(entry.getKey());
+            if (tagger == null || !tagger.isOnline()) continue;
+
+            // Find nearest runner
+            Player nearest = null;
+            double nearestDist = Double.MAX_VALUE;
+            for (Player runner : runners) {
+                if (!runner.getWorld().equals(tagger.getWorld())) continue;
+                double dist = tagger.getLocation().distanceSquared(runner.getLocation());
+                if (dist < nearestDist) {
+                    nearestDist = dist;
+                    nearest = runner;
+                }
+            }
+            if (nearest == null) continue;
+
+            tagger.setCompassTarget(nearest.getLocation());
+        }
     }
 
     // -------------------------------------------------------------------------

@@ -16,6 +16,7 @@ com/freezetag/game/GameState.class
 com/freezetag/game/VoteLobby$2.class
 com/freezetag/game/GamePlayer.class
 com/freezetag/hook/PlaceholderHook.class
+com/freezetag/game/FreezeTagGame$7.class
 com/freezetag/FreezeTagPlugin.class
 com/freezetag/game/VoteLobby$State.class
 com/freezetag/game/FreezeTagGame$6.class
